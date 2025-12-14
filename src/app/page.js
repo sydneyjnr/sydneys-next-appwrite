@@ -1,20 +1,35 @@
-import Image from "next/image";
+import axios from "axios";
 
-export default function Home() {
+export default async function Home() {
+  const response = await axios.get("http://localhost:3001/api/orders");
+  const { orders, total } = response.data;
   return (
-  <main className="container mx-auto max-w-200">
-    <div id="orders-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Customer</th>
-            <th>Status</th>
-            <th>Type</th>
-            <th>Total</th>            
-          </tr>
-        </thead>
-      </table>
-    </div>
+    <main className="container mx-auto max-w-200">
+      <div id="orders-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.$id}>
+                <td>
+                  <strong>{order.customer}</strong>
+                  <p>{order.customer_email}</p>
+                </td>
+                <td>{order.status}</td>
+                <td>{order.type}</td>
+                <td>{order.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </main>
   );
 }
